@@ -1,0 +1,168 @@
+ 1  sudo yum update -y
+    2  sudo yum install docker -y
+    3  docker --version
+    4  clear
+    5  sudo docker images
+    6  sudo docker ps
+    7  sudo systemctl enable docker
+    8  sudo systemctl start docker
+    9  sudo systemctl status docker
+   10  sudo docker images
+   11  sudo docker ps
+   12  sudo docker search hello-world
+   13  clear
+   14  sudo docker pull nginx
+   15  sudo docker images
+   16  sudo docker run -itd  76c69feac34e
+   17  sudo docker ps
+   18  sudo docker ps -a
+   19  sudo docker run -d --name=laughing_golick
+   20  sudo docker run -d --name=laughing_golick -p 5000:80 voting-app
+   21  sudo docker run -d --name=laughing_golick -p 5000:80 nginx
+   22  clear
+   23  sudo docker ps
+   24  sudo docker exec -it 40f3f54e4602 bash (ENTER INSIDE THE CONTAINER)
+   25  sudo docker container ls
+   26  touch dockerfile index.html
+   27  ls
+   28  vi index.html
+   29  vi Dockerfile
+   30  sudo docker build . -itd Dockerfile
+   31  sudo docker build . -t Dockerfile
+   32  sudo docker build. -t Dockerfile
+   33  clear
+   34  docker images
+   35  sudo docker images
+   36  sudo docker build.
+   37  sudo docker build . (TO BUILD THE IMAGE)
+   38  vi Dockerfile (TO WRITE THE DOCKERFILE)
+FROM httpd
+RUN apt-get update -y
+RUN apt-get upgrade -y
+RUN apt-get install git -y
+RUN apt-get install wget -y
+RUN apt-get install unzip -y
+RUN git clone https://github.com/vsvvkt/AzureProject1.git
+RUN cp -rp AzureProject1/* htdocs/
+CMD httpd -D FOREGROUND
+
+
+   39  sudo docker build .
+   40  clear
+   41  sudo docker images
+   42  sudo docker image tag 3bfb09865d5b manoj (GIVE THE TAG NAME)
+   43  sudo docker images
+   44  sudo dockerrun -it -p 81:80 -d manoj
+   45  sudo docker run -it -p 81:80 -d manoj (TO RUN CONTAINER -P CHANHE THE PORT AND GIVE IP ADDRESS AND PORT NUMBER IN BROWSER EX: 20.3320.12.12:81)
+   46  sudo docker ps
+   47  docker ps -a
+   48  sudo docker ps -a
+   49  history
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+MAVEN-PIPELINE :
+
+pipeline {
+    agent any
+    stages {
+        stage('git_clone') {
+            steps {
+                // Get some code from a GitHub repository
+                git url: 'https://github.com/ShailAdmin/MaventestCode.git', branch: 'master'
+                }
+        
+        }
+        stage('mvn_install') {
+            steps {
+                // Get some code from a GitHub repository
+               sh 'sudo yum install maven -y'
+               sh 'mvn --version'
+                }
+        
+        }
+        stage('build') {
+            steps {
+                // Get some code from a GitHub repository
+               sh 'mvn validate'
+               sh 'mvn compile'
+               sh 'mvn test'
+               sh 'mvn package'
+               sh 'mvn verify'
+               sh 'mvn install'
+                }
+        
+        }
+    }
+}
+node {
+
+  def remote = [:]
+
+  remote.name = 'test'
+
+  remote.host = '4.224.245.45' //tomcat server
+
+  remote.user = 'root'
+
+  remote.password = 'l'
+
+  remote.allowAnyHosts = true
+
+  stage('Remote SSH') {
+
+    writeFile file: 'abc.sh', text: 'ls -lrt'
+
+    sshPut remote: remote, from: '/var/lib/jenkins/workspace/pipeline/install/target/RegistrationForm.war', into: '/home/azureuser/apache-tomcat-8.5.83/webapps/ROOT.war'
+
+  }
+
+}
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TEST(WEBAPP)DOCKER-PIPELINE:
+pipeline {
+    agent any
+    stages {
+        stage('git_clone') {
+            steps {
+                // Get some code from a GitHub repository
+                git url: 'https://github.com/vsvvkt/SampleRegistratonForm.git', branch: 'master'
+            }
+		}
+		stage('dockerimagebuild') {
+			steps {
+				sh 'sudo docker build . -t webapp'
+			}
+		}
+		stage('dockercontainer') {
+			steps {
+				sh 'sudo docker run -p 8081:8080 -dit webapp'
+			}
+		}
+		
+	}
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TEST(WEBSERVER-DOCKERPIPELINE):
+pipeline {
+    agent any
+    stages {
+        stage('git_clone') {
+            steps {
+                // Get some code from a GitHub repository
+                git url: 'https://github.com/vsvvkt/AzureProject1.git', branch: 'master'
+            }
+		}
+		stage('dockerimagebuild') {
+			steps {
+				sh 'sudo docker build . -t webserver'
+			}
+		}
+		stage('dockercontainer') {
+			steps {
+				sh 'sudo docker run -p 81:80 -dit webserver'
+			}
+		}
+		
+	}
+}
